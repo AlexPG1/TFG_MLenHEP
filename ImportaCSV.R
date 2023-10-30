@@ -1,4 +1,4 @@
-# PRIMERA PART: familiarització amb les variables
+# PRIMERA PART: familiarització amb les variables -----------------------------
 # Primerament, el procés d'aprenentatge sencer, amb proves de diferents mètodes 
 # per carregar les dades i diagnòstic de la seua eficiència amb Sys.time() / system.time().
 
@@ -127,6 +127,38 @@ system.time(alternatiu <- read.table("all_train.csv",header=TRUE,sep=",",quote="
 
 # Vora dos minuts: 113.49 s
 
+# Mètode definitiu de càrrega --------------------------------------------------
+
+setwd("D:/OneDrive/Universitat/5. Quart'/TFG/RstudioPython/Dades/Normal")
+n = 7000000
+alltr <- read.table("all_train.csv",header=TRUE,sep=",",quote="",  
+                    stringsAsFactors=FALSE,comment.char="",nrows=n,                   
+                    colClasses=c("numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric"))
+milte <- read.table("1000_test.csv",header=TRUE,sep=",",quote="",  
+                    stringsAsFactors=FALSE,comment.char="",nrows=n/2,                   
+                    colClasses=c("numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric"))
+
+setwd("D:/OneDrive/Universitat/5. Quart'/TFG/RstudioPython/Dades/NoNormalTrue")
+
+tr1000a <- read.delim("xttbar_m1000_aug4.txt", header = FALSE)
+tr1000b <- read.delim("xttbar_m1000_aug17.txt", header = FALSE)
+tr1000 <- rbind(tr1000a, tr1000b)
+rm(tr1000a, tr1000b)
+
 
 
 
@@ -146,7 +178,7 @@ system.time(alternatiu <- read.table("all_train.csv",header=TRUE,sep=",",quote="
 
 
 --------------------------------------------------------------------------------
-# SEGONA PART: Representació i comparació entre norm i nonorm
+# SEGONA PART: Representació i comparació entre norm i nonorm ------------------
 # Representem ara histogrames de lepton_pt no normalitzat del dataset alltrain per a cada massa
 
 leptonTrainNorm <- alltr[,2]
@@ -240,7 +272,7 @@ hist(milte[,16], breaks = 80, xlab = "Energia normalitzada", main = "Histograma 
 
 
 --------------------------------------------------------------------------------
-# TERCERA PART: Matriu de correlacions
+# TERCERA PART: Matriu de correlacions -----------------------------------------
 # Recordem el mètode de selecció de columnes (Primer exercici). Escollim únicament les variables pT i masses, és a dir:
 # Dataset normalitzat:    2 8 12 16 20 24 25 26 27 28
 # Dataset no normalitzat: 1 7 11 15 19 23 24 25 26 27
@@ -277,5 +309,79 @@ corrplot(correlnonorm.cor, type = 'lower', method = 'color')
 # NOVETATS SEGONA SESSIÓ:
 # - Refer les correlacions separant signal i background.
 
+
+
+# SEGONA SESSIÓ
+# 2.1. Càlcul de la normalització ----------------------------------------------
+# Separem background i signal per a masses de 1000 normalitzat
+background <- subset(alltr, mass == 1000 & X..label == 0)
+signal <- subset(alltr, mass == 1000 & X..label == 1)
+
+
+# Normalitzem primer calculant el log(x + 10**-5)
+noNormal <- subset(tr1000, select = c(6,7,11,15,19,23,24,25,26,27))
+colnames(noNormal) <- c("Lept_pt","j1_pt","j2_pt","j3_pt","j4_pt","m_jj","m_jjj","m_lv","m_jlv","m_wwbb")
+reNormal <- sapply(noNormal, function(x) log(x+10**-5, base=exp(1)))
+
+# Ara treballem únicament amb el jet 1 p.e. Calculem la mitjana 
+jet1LogNormal <- reNormal [,2]
+mitjana <- mean(jet1LogNormal)
+jet1ReNormal <- (jet1LogNormal-mitjana)/mitjana
+
+hist(jet1ReNormal, breaks = 80, xlab = "Energia normalitzada", main = "Hist de p_T1 per a masses de 1000. Renormalitzat!")
+hist(signal[,8], breaks = 120, xlab = "Energia normalitzada", main = "Hist de p_T1 signal per a masses de 1000 prenormalitzat")
+hist(background[,8], breaks = 120, xlab = "Energia normalitzada", main = "Hist de p_T1 backgr per a masses de 1000 prenormalitzat")
+# EUREKA! La distribució de pt1 normalitzat per mi és anàloga a la part signal ja normalitzada!!
+
+
+
+hist(milte[,12], breaks = 80, xlab = "Energia normalitzada", main = "Histograma de l'energia del jet 2 per a masses de 1000")
+hist(milte[,16], breaks = 80, xlab = "Energia normalitzada", main = "Histograma de l'energia del jet 3 per a masses de 1000")
+
+hist(reNormal[,2], breaks = 80, xlab = "Energia GeV", main = "Histograma de l'energia del jet 1 per a masses de 1000")
+
+
+
+
+
+
+
+
+
+# 2.2. Recàlcul de les correlacions separant signal/back -----------------------
+# Separem dades de background i single, en particular, el fitxer alltr
+install.packages("corrplot")
+library(corrplot)
+palette = colorRampPalette(c("green", "white", "red")) (20)
+
+signal <- subset(alltr, X..label == 1)
+background <- subset(alltr, X..label == 0)
+rm(alltr)
+
+signalSelec <- subset(signal, select = c(2,8,12,16,20,24,25,26,27,28))
+backSelec  <- subset(background, select = c(2,8,12,16,20,24,25,26,27,28))
+rm(signal, background)
+
+colnames(signalSelec) <- c("Lept_pt","j1_pt","j2_pt","j3_pt","j4_pt","m_jj","m_jjj","m_lv","m_jlv","m_wwbb")
+colnames(backSelec) <- c("Lept_pt","j1_pt","j2_pt","j3_pt","j4_pt","m_jj","m_jjj","m_lv","m_jlv","m_wwbb")
+signalSelec.cor = cor(signalSelec)
+backSelec.cor = cor(backSelec)
+
+heatmap(x = signalSelec.cor, col = palette, symm = TRUE)
+corrplot(signalSelec.cor, type = 'lower', method = 'color')
+corrplot.mixed(signalSelec.cor, order = 'AOE')
+corrplot.mixed(signalSelec.cor, lower = 'shade', upper = 'pie', order = 'hclust')
+corrplot(signalSelec.cor, method = 'square', diag = FALSE, order = 'hclust',
+         addrect = 6, rect.col = 'blue', rect.lwd = 3, tl.pos = 'd')
+
+heatmap(x = backSelec.cor, col = palette, symm = TRUE)
+corrplot(backSelec.cor, type = 'lower', method = 'color')
+corrplot.mixed(backSelec.cor, order = 'AOE')
+corrplot.mixed(backSelec.cor, lower = 'shade', upper = 'pie', order = 'hclust')
+corrplot(backSelec.cor, method = 'square', diag = FALSE, order = 'hclust',
+         addrect = 6, rect.col = 'blue', rect.lwd = 3, tl.pos = 'd')
+
+
+# 2.3 Decision Trees amb LL / LL-HL / variables discriminants ------------------
 
 
