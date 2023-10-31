@@ -10,3 +10,7 @@ Arxius en R i python (Jupyter Notebook).
 - La part de DT està per polir, el DT sembla incomplet? Solament dues branques i únicament empra el nre. de jets per a classificar. Falta aprofundir, però sembla que la var LL més significativa podria ser aquesta.
 - També he afegit el codi en Python en format Jupyter Notebook (v. 3.6.3). En ell, he replicat el procés de càrrega i he estudiat un algoritme de DT (https://www.youtube.com/watch?v=NxEHSAfFlK8&list=PLcWfeUsAys2k_xub3mHks85sBHZvg24Jd&index=5). Aquest sembla poc eficient, però m'ha sigut útil per entendre amb més profunditat el procediment. També he tantejat les funcions de la llibreria sklearn.
 - Així doncs, treballaré per polir la part de DT en ambdos llenguatges.
+
+#### 31/10/2023:
+- Exàmens de precisió amb diferents seleccions de variables amb Python.sklearn. Màxim de precisió i rapidesa amb max_depth = 3 i variables 0, 3, 6 i 26 amb el dataset 1000_train/test
+- Potser seria raonable calcular l'error de la precisió separant el dataset de test en diversos i fer la mitjana i desviació? Quin rigor tindria?
