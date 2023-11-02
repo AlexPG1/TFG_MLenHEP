@@ -14,3 +14,7 @@ Arxius en R i python (Jupyter Notebook).
 #### 31/10/2023:
 - Exàmens de precisió amb diferents seleccions de variables amb Python.sklearn. Màxim de precisió i rapidesa amb max_depth = 3 i variables 0, 3, 6 i 26 amb el dataset 1000_train/test
 - Potser seria raonable calcular l'error de la precisió separant el dataset de test en diversos i fer la mitjana i desviació? Quin rigor tindria?
+
+#### 02/11/2023:
+- S'afigen les mesures kappa i F1-Score per avaluar els DT.
+- Experimentació amb noves variables. I si dividim f25 i f26 pel logaritme de la massa?
