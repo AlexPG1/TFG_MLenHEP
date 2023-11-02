@@ -16,5 +16,5 @@ Arxius en R i python (Jupyter Notebook).
 - Potser seria raonable calcular l'error de la precisió separant el dataset de test en diversos i fer la mitjana i desviació? Quin rigor tindria?
 
 #### 02/11/2023:
-- S'afigen les mesures kappa i F1-Score per avaluar els DT.
+- S'afigen les mesures kappa i F1-Score per avaluar els DT (python).
 - Experimentació amb noves variables. I si dividim f25 i f26 pel logaritme de la massa?
