@@ -22,3 +22,4 @@ Arxius en R i python (Jupyter Notebook).
 #### 07/11/2023:
 - Ordre d'apunts i comentaris per fer R més llegible.
 - Experimentació amb rpart (Rstudio) sense èxit (temps d'execució de l'ordre de les desenes de minuts per a seleccions petites)
+- RandomForest i AdaBoost tantejats en Python
