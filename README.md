@@ -18,3 +18,7 @@ Arxius en R i python (Jupyter Notebook).
 #### 02/11/2023:
 - S'afigen les mesures kappa i F1-Score per avaluar els DT (python).
 - Experimentació amb noves variables. I si dividim f25 i f26 pel logaritme de la massa?
+
+#### 07/11/2023:
+- Ordre d'apunts i comentaris per fer R més llegible.
+- Experimentació amb rpart (Rstudio) sense èxit (temps d'execució de l'ordre de les desenes de minuts per a seleccions petites)
