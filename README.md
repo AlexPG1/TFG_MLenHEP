@@ -12,7 +12,7 @@ Arxius en R i python (Jupyter Notebook).
 - Així doncs, treballaré per polir la part de DT en ambdos llenguatges.
 
 #### 31/10/2023:
-- Exàmens de precisió amb diferents seleccions de variables amb Python.sklearn. Màxim de precisió i rapidesa amb max_depth = 3 i variables 0, 3, 6 i 26 amb el dataset 1000_train/test
+- Exàmens de precisió amb diferents seleccions de variables amb Python.sklearn. Màxim de precisió i rapidesa amb max_depth = 3 i variables 0, 3, 6 i 26 amb el dataset 1000_train/test.
 - Potser seria raonable calcular l'error de la precisió separant el dataset de test en diversos i fer la mitjana i desviació? Quin rigor tindria?
 
 #### 02/11/2023:
@@ -21,5 +21,10 @@ Arxius en R i python (Jupyter Notebook).
 
 #### 07/11/2023:
 - Ordre d'apunts i comentaris per fer R més llegible.
-- Experimentació amb rpart (Rstudio) sense èxit (temps d'execució de l'ordre de les desenes de minuts per a seleccions petites)
-- RandomForest i AdaBoost tantejats en Python
+- Experimentació amb rpart (Rstudio) sense èxit (temps d'execució de l'ordre de les desenes de minuts per a seleccions petites).
+- RandomForest i AdaBoost tantejats en Python.
+
+#### 09/11/2023:
+- Càlcul de la massa invariant --> desnormalització dels btag i selecció d'esdeveniments amb dos bjets.
+- Selecció de les dades dels jets no b molt ineficient (~30 minuts) --> trobar altre mecanisme.
+- Representació en histogrames d'ambdues distribucions de masses en camí.
