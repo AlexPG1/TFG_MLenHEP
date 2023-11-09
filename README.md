@@ -26,5 +26,5 @@ Arxius en R i python (Jupyter Notebook).
 
 #### 09/11/2023:
 - Càlcul de la massa invariant --> desnormalització dels btag i selecció d'esdeveniments amb dos bjets.
-- Selecció de les dades dels jets no b molt ineficient (~30 minuts) --> trobar altre mecanisme.
+- Selecció de les dades dels jets no b molt ineficient (~30 minuts) --> trobar altre mecanisme --> igualment, he guardat vectors com un csv.
 - Representació en histogrames d'ambdues distribucions de masses en camí.
