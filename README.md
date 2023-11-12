@@ -28,3 +28,7 @@ Arxius en R i python (Jupyter Notebook).
 - Càlcul de la massa invariant --> desnormalització dels btag i selecció d'esdeveniments amb dos bjets.
 - Selecció de les dades dels jets no b molt ineficient (~30 minuts) --> trobar altre mecanisme --> igualment, he guardat vectors com un csv.
 - Representació en histogrames d'ambdues distribucions de masses en camí.
+
+#### 12/11/2023:
+- Representació en histogrames de les masses completades, tres distribucions diferents detectant possibles errors.
+- Càlcul de precisió/kappa/F1S mitjana i desviació dividint el test en múltiples tests, però sense resultat satisfactori: sembla arbitrari escollir un nombre de tests o altre, ídem amb hiperparàmetres --> error arbitrari?
