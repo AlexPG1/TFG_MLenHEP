@@ -35,5 +35,5 @@ Arxius en R i python (Jupyter Notebook).
 
 #### 14-18/11/2023:
 - Representació dels mesuradors en funció de la profunditat i temps d'execució en funció de la profunditat (plots 1 i 2).
+- Intent infructuós de plotar els trees en format llegible --> PlotTree adients i guardats.
 - Automatització del rang de n_depths i enmagatzemament de les dades en carpeta arxius (més accessible i automàtic que en la taula) i reexecució dels DT amb depths = 2-10, totes les masses, totes les variables.
-- Intent infructuós de plotar els trees en format llegible.
