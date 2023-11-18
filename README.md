@@ -32,3 +32,8 @@ Arxius en R i python (Jupyter Notebook).
 #### 12/11/2023:
 - Representació en histogrames de les masses completades, tres distribucions diferents detectant possibles errors.
 - Càlcul de precisió/kappa/F1S mitjana i desviació dividint el test en múltiples tests, però sense resultat satisfactori: sembla arbitrari escollir un nombre de tests o altre, ídem amb hiperparàmetres --> error arbitrari?
+
+#### 14-18/11/2023:
+- Representació dels mesuradors en funció de la profunditat i temps d'execució en funció de la profunditat (plots 1 i 2).
+- Automatització del rang de n_depths i enmagatzemament de les dades en carpeta arxius (més accessible i automàtic que en la taula) i reexecució dels DT amb depths = 2-10, totes les masses, totes les variables.
+- Intent infructuós de plotar els trees en format llegible.
