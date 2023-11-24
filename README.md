@@ -37,3 +37,7 @@ Arxius en R i python (Jupyter Notebook).
 - Representació dels mesuradors en funció de la profunditat i temps d'execució en funció de la profunditat (plots 1 i 2).
 - Intent infructuós de plotar els trees en format llegible --> PlotTree adients i guardats.
 - Automatització del rang de n_depths i enmagatzemament de les dades en carpeta arxius (més accessible i automàtic que en la taula) i reexecució dels DT amb depths = 2-10, totes les masses, totes les variables.
+
+ #### 24/11/2023:
+ - Primera representació n_leaves vs. temps d'execució --> Sembla descartable que el procés es mantinga linial per aquest motiu. Cal trobar un altra justificació.
+ - Càlcul automatitzat dels estimadors per a diferents hiperparàmetres i guardats a l'arxiu "QuartaSessio.txt".
