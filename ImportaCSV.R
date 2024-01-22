@@ -129,7 +129,7 @@ system.time(alternatiu <- read.table("all_train.csv",header=TRUE,sep=",",quote="
 
 # Mètode definitiu de càrrega --------------------------------------------------
 
-setwd("D:/OneDrive/Universitat/5. Quart'/TFG/RstudioPython/Dades/Normal")
+setwd("D:/OneDrive/Universitat/5. Quint/TFG/RstudioPython/Dades/Normal")
 n = 7000000
 alltr <- read.table("all_train.csv",header=TRUE,sep=",",quote="",  
                     stringsAsFactors=FALSE,comment.char="",nrows=n,                   
@@ -152,7 +152,7 @@ milte <- read.table("1000_test.csv",header=TRUE,sep=",",quote="",
                                  "numeric","numeric","numeric","numeric",
                                  "numeric"))
 
-setwd("D:/OneDrive/Universitat/5. Quart'/TFG/RstudioPython/Dades/NoNormalTrue")
+setwd("D:/OneDrive/Universitat/5. Quint/TFG/RstudioPython/Dades/NoNormalTrue")
 
 tr1000a <- read.delim("xttbar_m1000_aug4.txt", header = FALSE)
 tr1000b <- read.delim("xttbar_m1000_aug17.txt", header = FALSE)
@@ -328,7 +328,14 @@ jet1LogNormal <- reNormal [,2]
 mitjana <- mean(jet1LogNormal)
 jet1ReNormal <- (jet1LogNormal-mitjana)/mitjana
 
-hist(jet1ReNormal, breaks = 80, xlab = "Energia normalitzada", main = "Hist de p_T1 per a masses de 1000. Renormalitzat!")
+
+
+mitjana <- mean(noNormal[,2])
+reNormal <- (noNormal[,2]-mitjana)/mitjana
+jet1ReNormal <- sapply(reNormal, function(x) log(x+10**-5, base=exp(1)))
+
+
+hist(jet1ReNormal, breaks = 80, xlab = "Energia normalitzada", main = "Hist de p_T1 per a masses de 1000. Renormalitzat 2")
 hist(signal[,8], breaks = 120, xlab = "Energia normalitzada", main = "Hist de p_T1 signal per a masses de 1000 prenormalitzat")
 hist(background[,8], breaks = 120, xlab = "Energia normalitzada", main = "Hist de p_T1 backgr per a masses de 1000 prenormalitzat")
 # EUREKA! La distribució de pt1 normalitzat per mi és anàloga a la part signal ja normalitzada!!
@@ -390,7 +397,180 @@ rpart.plot(treeLL)
 treeALL <- rpart(label ~ lpt+etal+psil+MET+MEphi+njets+pT1+eta1+psi1+b1+pT2+eta2+psi2+b2+pT3+eta3+psi3+b3+pT4+eta4+psi4+b4+m_jj+m_jjj+m_lv+m_jlv+m_wwbb+mass,dataset)
 
 
+# 3.1. Recàlcul de la distribució normalitzada (menor dispersió): --------------
+
+# Agafem únicament els moments i les masses
+noNormal <- subset(tr1000, select = c(6,7,11,15,19,23,24,25,26,27))
+colnames(noNormal) <- c("Lept_pt","j1_pt","j2_pt","j3_pt","j4_pt","m_jj","m_jjj","m_lv","m_jlv","m_wwbb")
+
+# Apliquem el logaritme. Treballem únicament amb el jet 1 de moment. Calculem la mitjana i normalitzem
+reNormal <- sapply(noNormal, function(x) log10(x+10**-5))
+jet1LogNormal <- reNormal [,2]
+mitjana <- mean(jet1LogNormal)
+jet1ReNormal <- (jet1LogNormal-mitjana)/mitjana
+
+
+# Provem a normalitzar i després calcular el logaritme (contrari al .txt) --> error, logaritme de negatiu
+mitjanaGran <- mean(noNormal[,2])
+jet1Anti <- (noNormal[,2]-mitjanaGran)/mitjanaGran
+jet1AntiNormal <- sapply(jet1Anti, function(x) log(x+10**-5, base=exp(1)))
+
+# I si no dividírem per la mitjanaGran?
+reNormal <- sapply(noNormal, function(x) log(x+10**-5, base=exp(1)))
+jet1Prova <- reNormal [,2]
+mitjana <- mean(jet1Prova)
+jet1Prova <- (jet1Prova-mitjana)
+
+
+
+# Representem i comparem
+hist(jet1LogNormal, breaks = 80, xlab = "Logaritme de l'energia", main = "Hist pt1 - m1000. Distribució del logaritme.")
+hist(jet1ReNormal, breaks = 80, xlab = "Energia normalitzada", main = "Hist pt1 - m1000. Renormalitzat conforme al .txt")
+hist(jet1AntiNormal, breaks = 80, xlab = "Energia normalitzada", main = "Hist pt1 - m1000. Renormalitzat a la inversa, 1r mitjana, 2n logaritme.")
+hist(jet1Prova, breaks = 80, xlab = "Energia normalitzada", main = "Hist pt1 - m1000. Semblat a .txt, però sense dividir per mitjana.")
+hist(signal[,8], breaks = 120, xlab = "Energia normalitzada", main = "Hist de p_T1 signal per a masses de 1000 prenormalitzat")
+hist(background[,8], breaks = 120, xlab = "Energia normalitzada", main = "Hist de p_T1 backgr per a masses de 1000 prenormalitzat")
+
+
+hist(noNormal[,2], breaks = 80, xlab = "Energia no normalitzada")
+
+
+
+reNormal <- sapply(noNormal, function(x) log10(x+10**-5))
+jet1LogNormal <- reNormal [,2]
+mitjana <- mean(jet1LogNormal)
+desviacio <- sd(jet1LogNormal)
+jet1ReNormal <- (jet1LogNormal-mitjana)/desviacio
+hist(jet1ReNormal, breaks = 80, xlab = "Energia normalitzada", main = "Hist pt1 - m1000. Renormalitzat conforme al .txt")
 
 
 
 
+
+# 4.4 Recàlcul de la distribució normalitzada: mesclar signal i background -----
+# Càrrega de dades:
+## Carreguem tb trback
+setwd("D:/OneDrive/Universitat/5. Quint/TFG/RstudioPython/Dades/NoNormalTrue")
+trbacka <- read.delim("smttbar_aug4.txt", header = FALSE)
+trbackb <- read.delim("smttbar_aug24.txt", header = FALSE)
+trback <- rbind(trbacka, trbackb)
+rm(trbacka, trbackb)
+
+# Seleccionem les dades no normalitzades
+noNormal1 <- subset(tr1000, select = c(6,7,11,15,19,23,24,25,26,27))
+noNormal0 <- subset(trback, select = c(6,7,11,15,19,23,24,25,26,27))
+noNormal <- rbind(noNormal1, noNormal0)
+colnames(noNormal) <- c("Lept_pt","j1_pt","j2_pt","j3_pt","j4_pt","m_jj","m_jjj","m_lv","m_jlv","m_wwbb")
+
+# Fem els càlculs: 
+# 1. logaritme
+reNormal <- sapply(noNormal, function(x) log10(x+10**-5))
+# 2. Seleccionem jet 1 solament
+jet1LogNormal <- reNormal [,2]
+# 3. Calculem la mitjana
+mitjana <- mean(jet1LogNormal)
+# 4. Restem i dividim per la mitjana
+jet1ReNormal <- (jet1LogNormal-mitjana)/mitjana
+
+
+# Representem la renormalització progressivament
+# 1. Distribució sense normalitzar
+hist(noNormal[,2], breaks = 80, xlab = "1. Energia no normalitzada")
+# 2. Distribució del logaritme
+hist(jet1LogNormal, breaks = 80, xlab = "Logaritme de l'energia", main = "2. Logaritme de l'energia")
+# 3. Distribució renormalitzada
+hist(jet1ReNormal, breaks = 80, xlab = "Energia normalitzada", main = "3. Renormalitzat conforme al .txt. Signal i back junts")
+
+
+
+# Ara repetirem els càlculs emprant la mitjana amb signal i back per a normalitzar únicament signal
+# 1. logaritme
+reNormal1 <- sapply(noNormal1, function(x) log10(x+10**-5))
+# 2. Seleccionem jet 1 solament
+jet1LogNormal1 <- reNormal1 [,2]
+# 4. Restem i dividim per la mitjana
+jet1ReNormal1 <- (jet1LogNormal1-mitjana)/mitjana
+
+# 3. Distribució renormalitzada solament amb signal
+hist(jet1ReNormal1, breaks = 80, xlab = "Energia normalitzada", main = "4. Renormalitzat conforme al .txt. Signal solament")
+
+# 6. Recàlcul d'alguns plots ---------------------------------------------------
+
+# Càrrega de dades (Nou PC)
+# Variables normalitzades
+setwd("C:/Users/alexp/OneDrive/Universitat/5. Quint/TFG/RstudioPython/Dades/Normal")
+n = 7000000
+alltr <- read.table("all_train.csv",header=TRUE,sep=",",quote="",  
+                    stringsAsFactors=FALSE,comment.char="",nrows=n,                   
+                    colClasses=c("numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric"))
+milte <- read.table("1000_test.csv",header=TRUE,sep=",",quote="",  
+                    stringsAsFactors=FALSE,comment.char="",nrows=n/2,                   
+                    colClasses=c("numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",                        
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric","numeric","numeric","numeric",
+                                 "numeric"))
+
+setwd("C:/Users/alexp/OneDrive/Universitat/5. Quint/TFG/RstudioPython/Dades/NoNormalTrue")
+
+# Variables no normalitzades
+tr1000a <- read.delim("xttbar_m1000_aug4.txt", header = FALSE)
+tr1000b <- read.delim("xttbar_m1000_aug17.txt", header = FALSE)
+tr1000 <- rbind(tr1000a, tr1000b)
+rm(tr1000a, tr1000b)
+
+setwd("C:/Users/alexp/OneDrive/Universitat/5. Quint/TFG/RstudioPython/Dades/NoNormalTrue")
+trbacka <- read.delim("smttbar_aug4.txt", header = FALSE)
+trbackb <- read.delim("smttbar_aug24.txt", header = FALSE)
+trback <- rbind(trbacka, trbackb)
+rm(trbacka, trbackb)
+
+
+Jet1SignalNoNorm <- subset(tr1000, select = c(7))
+Jet1BackgrNoNorm <- subset(trback, select = c(7))
+
+c1 <- rgb(144,238,144,max = 255, alpha = 80, names = "lt.green")
+c2 <- rgb(255, 71, 76, max = 255, alpha = 80, names = "lt.red")
+c3 <- rgb(46,218,255, max = 255, alpha = 80, names = "lt.blue")
+
+hist(Jet1SignalNoNorm[,1], ylab = "Freqüència", xlab = "Energia GeV", main = "Moment transversal del primer jet - BSM 1000", breaks = 100, xlim = c(0,1000), col = c1)
+hist(Jet1BackgrNoNorm[,1], ylab = "Freqüència", xlab = "Energia GeV", main = "Moment transversal del primer jet - SM", breaks = 100, xlim = c(0,1000), col = c2, add = TRUE)
+hist(Jet1BackgrNoNorm[,1], ylab = "Freqüència", xlab = "Energia GeV", main = "Moment transversal del primer jet - SM", breaks = 250, xlim = c(0,400), col = c2)
+
+# Si ara mesclem nombre semblant d'ambdós (5 milions de cada), podem reproduïr el contingut de la mostra ja normalitzada
+# Ara repetirem els càlculs emprant la mitjana amb signal i back per a normalitzar únicament signal
+# 1. logaritme
+logaritmeSignal <- sapply(Jet1SignalNoNorm[0:5000000,1], function(x) log10(x+10**-5))
+logaritmeBackgr <- sapply(Jet1BackgrNoNorm[0:5000000,1], function(x) log10(x+10**-5))
+# 2. Unim ambdós en un: calcular la mitjana
+logaritmeBoth <- rbind(logaritmeSignal, logaritmeBackgr)
+mitjana <- mean(logaritmeBoth)
+
+# 3. Restem i dividim per la mitjana
+Jet1SignalNORM <- (logaritmeSignal-mitjana)/mitjana
+Jet1BackgrNORM <- (logaritmeBackgr-mitjana)/mitjana
+
+# 4. Representem ambdós junts
+hist(Jet1SignalNORM, ylab = "Freqüència", xlab = "Energia normalitzada", main = "Moment transversal del primer jet normalitzat - SM i BSM", breaks = 100, col = c1)
+hist(Jet1BackgrNORM, ylab = "Freqüència", xlab = "Energia normalitzada", breaks = 100, col = c2, add = TRUE)
+legend(0.3,100000, legend=c("BSM", "SM"), pch=15, col = c(c1,c2))
+
+
+# Representem també l'histograma prenormalitzat
+c3 <- rgb(46,218,255, max = 255, alpha = 80, names = "lt.blue")
+c4 <- rgb(142,124,195, max = 255, alpha = 80, names = "lt.purple")
+SignalPreNorm <- subset(milte, X..label == 1)
+BackgrPreNorm <- subset(milte, X..label == 0)
+hist(SignalPreNorm[,8], ylab = "Freqüència", xlab = "Energia normalitzada", main = "Moment transversal del primer jet prenormalitzat - SM i BSM", breaks = 100, col = c4)
+hist(BackgrPreNorm[,8], ylab = "Freqüència", xlab = "Energia normalitzada", breaks = 100, col = c3, add = TRUE)
+legend(2.5,20000, legend=c("BSM", "SM"), pch=15, col = c(c4,c3))
