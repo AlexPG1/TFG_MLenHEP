@@ -41,3 +41,10 @@ Arxius en R i python (Jupyter Notebook).
  #### 24/11/2023:
  - Primera representació n_leaves vs. temps d'execució --> Sembla descartable que el procés es mantinga linial per aquest motiu. Cal trobar un altra justificació.
  - Càlcul automatitzat dels estimadors per a diferents hiperparàmetres i guardats a l'arxiu "QuartaSessio.txt".
+
+#### 22/1/2024 (Actualització final):
+- Actualització del progrés dels últims dos mesos, afegint, reorganitzant i refent les figures finals per a la memòria.
+- Pas de repositori privat a públic per poder citar adientment en la bibliografia de la memòria.
+
+
+## Comentaris finals:
